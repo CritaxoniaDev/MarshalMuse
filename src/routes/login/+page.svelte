@@ -1,6 +1,7 @@
 <script>
     import { initializeApp } from 'firebase/app';
-    import { getAuth, signInWithRedirect, GoogleAuthProvider } from 'firebase/auth';
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+    import { goto } from '$app/navigation';
 
     const firebaseConfig = {
         apiKey: 'AIzaSyBt9XLOdRcGAx50Bj5Aija7CI1h_RAG9YU',
@@ -16,12 +17,19 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    function signInWithGoogle() {
-        signInWithRedirect(auth, provider);
+    async function signInWithGoogle() {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            if (result.user) {
+                goto('/dashboard');
+            }
+        } catch (error) {
+            console.log('Sign-in error:', error);
+        }
     }
 </script>
 
-<div class="pt-20 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
+<div class="pt-20 flex items-center justify-center">
     <div class="max-w-md w-full p-8 bg-white rounded-2xl shadow-[0_20px_50px_rgba(8,_112,_184,_0.1)] space-y-8">
         <div class="text-center space-y-2">
             <h2 class="text-4xl font-extrabold tracking-tight text-gray-900">Welcome back</h2>
