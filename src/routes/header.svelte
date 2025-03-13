@@ -4,6 +4,7 @@
 	import { spring } from 'svelte/motion';
 	import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 	import { page } from '$app/stores';
+	import * as Input from '$lib/components/ui/input';
 	import * as Button from '$lib/components/ui/button';
 
 	$: isAuthPage = $page.url.pathname === '/login' || $page.url.pathname === '/signup';
@@ -98,12 +99,15 @@
 				<div class="flex items-center gap-4">
 					<!-- Search -->
 					{#if user}
-						<div class="relative">
-							<Search class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-							<input
+						<div class="relative w-64">
+							<Search
+								class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+								size={16}
+							/>
+							<Input.Root
 								type="search"
-								class="pl-10 pr-4 py-1.5 w-64 text-sm bg-gray-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-colors"
 								placeholder="Search docs..."
+								class="pl-10 rounded-full transition-colors"
 							/>
 						</div>
 					{/if}
@@ -133,12 +137,14 @@
 							</Button.Root>
 						</div>
 					{:else if !isAuthPage}
-						<button
-							class="flex items-center cursor-pointer gap-2 px-4 py-1.5 text-sm bg-blue-600 text-white rounded-sm border-2 border-blue-600 transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]"
+						<Button.Root
+							variant="default"
+							size="sm"
+							class="gap-2 cursor-pointer px-4 py-1.5 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(59,130,246,1)] border-2 border-blue-600"
 							on:click={() => (window.location.href = '/login')}
 						>
 							Sign In
-						</button>
+						</Button.Root>
 					{/if}
 
 					<!-- Theme Toggle -->

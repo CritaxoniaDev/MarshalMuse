@@ -59,6 +59,7 @@
 		"@zerodevx/svelte-toast": "^0.9.6",
 		"firebase": "^11.4.0",
 		"lucide-svelte": "^0.479.0",
+		"mermaid": "^11.5.0",
 		"svelte-icons": "^2.1.0",
 		"svelte-motion": "^0.12.2"
 	}

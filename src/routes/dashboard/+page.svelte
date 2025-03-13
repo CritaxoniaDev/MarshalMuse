@@ -37,7 +37,8 @@
 			icon: Workflow,
 			description: 'Design system architectures and workflows visually',
 			stats: '8 Saved Diagrams',
-			color: 'bg-blue-100 text-blue-600'
+			color: 'bg-blue-100 text-blue-600',
+			href: '/app/flowchart-creator'
 		},
 		{
 			title: 'AI Prompt Generator',
@@ -103,6 +104,7 @@
 										variant="outline"
 										size="sm"
 										class="gap-2 cursor-pointer px-4 py-1.5 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] border-2"
+										on:click={() => goto(tool.href)}
 									>
 										Open Tool
 									</Button.Root>
@@ -119,7 +121,10 @@
 							<Card.Title>Recent Activity</Card.Title>
 							<Card.Description>Your latest development actions</Card.Description>
 						</div>
-						<Button.Root class="gap-2 cursor-pointer px-4 py-1.5 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] border-2" variant="outline">View All</Button.Root>
+						<Button.Root
+							class="gap-2 cursor-pointer px-4 py-1.5 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] border-2"
+							variant="outline">View All</Button.Root
+						>
 					</Card.Header>
 					<Card.Content>
 						<div class="space-y-4">
