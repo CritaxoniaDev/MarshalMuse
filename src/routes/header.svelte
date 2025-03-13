@@ -4,6 +4,7 @@
 	import { spring } from 'svelte/motion';
 	import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 	import { page } from '$app/stores';
+	import * as Button from '$lib/components/ui/button';
 
 	$: isAuthPage = $page.url.pathname === '/login' || $page.url.pathname === '/signup';
 	const auth = getAuth();
@@ -57,20 +58,24 @@
 			<!-- Logo -->
 			<a href="/" class="flex items-center gap-2 group">
 				<div
-					class="bg-blue-100 p-2 rounded-full transform transition-transform group-hover:rotate-[-10deg] group-hover:scale-105"
+					class="transform transition-transform group-hover:rotate-[-10deg] group-hover:scale-105"
 				>
 					<svg
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
+						class="w-6 h-6 text-gray-800 dark:text-white"
+						aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
 						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						class="text-blue-600"
+						viewBox="0 0 24 24"
 					>
-						<path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v5" />
-						<path d="M12 12v8" />
-						<path d="m8 16 4-4 4 4" />
+						<path
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M6 6h8m-8 4h12M6 14h8m-8 4h12"
+						/>
 					</svg>
 				</div>
 				<span class="font-bold text-xl tracking-tight">MarshalMuse</span>
@@ -103,14 +108,6 @@
 						</div>
 					{/if}
 
-					<!-- Github -->
-					<button
-						class="flex items-center cursor-pointer gap-2 px-4 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-sm border-2 border-gray-200 transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(229,231,235,1)]"
-						on:click={() => (window.location.href = 'https://github.com/CritaxoniaDev/MarshalMuse')}
-					>
-						<Github size={16} /> Star
-					</button>
-
 					{#if user}
 						<div class="flex items-center gap-4">
 							<a
@@ -125,12 +122,15 @@
 								<span class="font-medium">{user.displayName}</span>
 							</a>
 
-							<button
-								class="flex items-center cursor-pointer gap-2 px-4 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-sm border-2 border-gray-200 transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(229,231,235,1)]"
+							<Button.Root
+								variant="outline"
+								size="sm"
+								class="gap-2 cursor-pointer px-4 py-1.5 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(239,68,68,1)] border-2"
 								on:click={handleSignOut}
 							>
-								<LogOut size={16} /> Sign Out
-							</button>
+								<LogOut size={16} />
+								Sign Out
+							</Button.Root>
 						</div>
 					{:else if !isAuthPage}
 						<button

@@ -1,7 +1,9 @@
 <script>
     import '../app.css';
+    import '@fontsource-variable/public-sans';
     import Header from './header.svelte';
     import { initializeApp } from 'firebase/app';
+    import { SvelteToast } from '@zerodevx/svelte-toast'
     
     const firebaseConfig = {
         apiKey: 'AIzaSyBt9XLOdRcGAx50Bj5Aija7CI1h_RAG9YU',
@@ -18,4 +20,5 @@
 </script>
 
 <Header />
+<SvelteToast />
 {@render children()}
