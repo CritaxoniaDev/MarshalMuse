@@ -40,6 +40,8 @@
 		"@tailwindcss/vite": "^4.0.0",
 		"bits-ui": "^0.22.0",
 		"clsx": "^2.1.1",
+		"embla-carousel-svelte": "^8.5.2",
+		"lucide-svelte": "^0.479.0",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"publint": "^0.3.2",
@@ -58,9 +60,9 @@
 		"@fontsource-variable/public-sans": "^5.2.5",
 		"@zerodevx/svelte-toast": "^0.9.6",
 		"firebase": "^11.4.0",
-		"lucide-svelte": "^0.479.0",
 		"mermaid": "^11.5.0",
 		"svelte-icons": "^2.1.0",
-		"svelte-motion": "^0.12.2"
+		"svelte-motion": "^0.12.2",
+		"svelte-routing": "^2.13.0"
 	}
 }

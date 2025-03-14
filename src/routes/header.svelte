@@ -35,6 +35,12 @@
 		});
 	});
 
+	onMount(() => {
+		onAuthStateChanged(auth, (userData) => {
+			user = userData;
+		});
+	});
+
 	function toggleTheme() {
 		isDark = !isDark;
 		document.documentElement.classList.toggle('dark');
@@ -57,7 +63,7 @@
 	<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between h-16">
 			<!-- Logo -->
-			<a href="/" class="flex items-center gap-2 group">
+			<a href={user ? '/dashboard' : '/'} class="flex items-center gap-2 group">
 				<div
 					class="transform transition-transform group-hover:rotate-[-10deg] group-hover:scale-105"
 				>

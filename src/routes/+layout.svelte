@@ -1,4 +1,5 @@
 <script>
+    import { Router, Route, Link } from "svelte-routing";
     import '../app.css';
     import '@fontsource-variable/public-sans';
     import Header from './header.svelte';

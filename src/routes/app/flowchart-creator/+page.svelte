@@ -32,6 +32,7 @@
 	let isDrawingConnection = false;
 	let startPoint = null;
 	let scale = 1;
+	let loading = true;
 
 	const shapes = [
 		{
@@ -61,6 +62,7 @@
 	let tempConnection = null;
 	let editingElement = null;
 	let tempText = '';
+	let connectionColor = '#2563eb';
 
 	// Add this to your shapes array
 	const connectionTool = {
@@ -68,6 +70,23 @@
 		icon: ArrowRight,
 		label: 'Connect Shapes'
 	};
+
+	const connectionColors = [
+		{ value: '#2563eb', label: 'Blue' },
+		{ value: '#000000', label: 'Black' },
+		{ value: '#dc2626', label: 'Red' },
+		{ value: '#16a34a', label: 'Green' }
+	];
+
+	function createConnection(source, target) {
+		connections.push({
+			start: source.id,
+			end: target.id,
+			type: 'straight',
+			color: connectionColor
+		});
+		saveState();
+	}
 
 	// Add this function to handle double click
 	function handleDoubleClick(e) {
@@ -201,11 +220,11 @@
 		ctx.beginPath();
 		ctx.moveTo(startElement.x + startElement.width / 2, startElement.y + startElement.height / 2);
 		ctx.lineTo(endElement.x + endElement.width / 2, endElement.y + endElement.height / 2);
-		ctx.strokeStyle = '#2563eb';
+		ctx.strokeStyle = connection.color || '#2563eb'; // Use connection color or default
 		ctx.lineWidth = 2;
 		ctx.stroke();
 
-		// Draw arrow head
+		// Draw arrow head with the same color
 		const angle = Math.atan2(endElement.y - startElement.y, endElement.x - startElement.x);
 		ctx.beginPath();
 		ctx.moveTo(endElement.x + endElement.width / 2, endElement.y + endElement.height / 2);
@@ -218,7 +237,7 @@
 			endElement.y + endElement.height / 2 - 10 * Math.sin(angle + Math.PI / 6)
 		);
 		ctx.closePath();
-		ctx.fillStyle = '#2563eb';
+		ctx.fillStyle = connection.color || '#2563eb';
 		ctx.fill();
 	}
 
@@ -323,10 +342,12 @@
 					sourceShape = clickedElement;
 					tempConnection = { start: sourceShape, end: { x, y } };
 				} else {
+					// Add the connection with the selected color
 					connections.push({
 						start: sourceShape.id,
 						end: clickedElement.id,
-						type: 'straight'
+						type: 'straight',
+						color: connectionColor // Include the selected color
 					});
 					sourceShape = null;
 					tempConnection = null;
@@ -342,11 +363,14 @@
 
 	function handleCanvasMouseMove(e) {
 		if (tempConnection) {
-			const rect = canvas.getBoundingClientRect();
-			const x = (e.clientX - rect.left) / scale;
-			const y = (e.clientY - rect.top) / scale;
-			tempConnection.end = { x, y };
-			render();
+			ctx.beginPath();
+			ctx.moveTo(sourceShape.x + sourceShape.width / 2, sourceShape.y + sourceShape.height / 2);
+			ctx.lineTo(tempConnection.end.x, tempConnection.end.y);
+			ctx.strokeStyle = connectionColor; // Use the selected color
+			ctx.setLineDash([5, 5]);
+			ctx.lineWidth = 2;
+			ctx.stroke();
+			ctx.setLineDash([]);
 		} else if (selectedElement && !isConnectionMode) {
 			const rect = canvas.getBoundingClientRect();
 			selectedElement.x = (e.clientX - rect.left) / scale;
@@ -395,13 +419,122 @@
 		}
 	}
 
+	function saveAsPNG() {
+		// Create a temporary canvas for rendering without the grid
+		const tempCanvas = document.createElement('canvas');
+		tempCanvas.width = canvas.width;
+		tempCanvas.height = canvas.height;
+		const tempCtx = tempCanvas.getContext('2d');
+
+		// Fill with white background
+		tempCtx.fillStyle = 'white';
+		tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+		// Apply the same scale
+		tempCtx.save();
+		tempCtx.scale(scale, scale);
+
+		// Draw only the elements and connections (no grid)
+		connections.forEach((connection) => {
+			const startElement = elements.find((el) => el.id === connection.start);
+			const endElement = elements.find((el) => el.id === connection.end);
+
+			if (!startElement || !endElement) return;
+
+			tempCtx.beginPath();
+			tempCtx.moveTo(
+				startElement.x + startElement.width / 2,
+				startElement.y + startElement.height / 2
+			);
+			tempCtx.lineTo(endElement.x + endElement.width / 2, endElement.y + endElement.height / 2);
+			tempCtx.strokeStyle = connection.color || '#2563eb';
+			tempCtx.lineWidth = 2;
+			tempCtx.stroke();
+
+			// Draw arrow head
+			const angle = Math.atan2(endElement.y - startElement.y, endElement.x - startElement.x);
+			tempCtx.beginPath();
+			tempCtx.moveTo(endElement.x + endElement.width / 2, endElement.y + endElement.height / 2);
+			tempCtx.lineTo(
+				endElement.x + endElement.width / 2 - 10 * Math.cos(angle - Math.PI / 6),
+				endElement.y + endElement.height / 2 - 10 * Math.sin(angle - Math.PI / 6)
+			);
+			tempCtx.lineTo(
+				endElement.x + endElement.width / 2 - 10 * Math.cos(angle + Math.PI / 6),
+				endElement.y + endElement.height / 2 - 10 * Math.sin(angle + Math.PI / 6)
+			);
+			tempCtx.closePath();
+			tempCtx.fillStyle = connection.color || '#2563eb';
+			tempCtx.fill();
+		});
+
+		// Draw elements
+		elements.forEach((element) => {
+			tempCtx.fillStyle = '#ffffff';
+			tempCtx.strokeStyle = '#2563eb';
+			tempCtx.lineWidth = 2;
+
+			switch (element.type) {
+				case 'rectangle':
+					tempCtx.beginPath();
+					tempCtx.rect(element.x, element.y, element.width, element.height);
+					tempCtx.fill();
+					tempCtx.stroke();
+					break;
+
+				case 'circle':
+					tempCtx.beginPath();
+					tempCtx.ellipse(
+						element.x + element.width / 2,
+						element.y + element.height / 2,
+						element.width / 2,
+						element.height / 2,
+						0,
+						0,
+						2 * Math.PI
+					);
+					tempCtx.fill();
+					tempCtx.stroke();
+					break;
+
+				case 'diamond':
+					tempCtx.beginPath();
+					tempCtx.moveTo(element.x + element.width / 2, element.y);
+					tempCtx.lineTo(element.x + element.width, element.y + element.height / 2);
+					tempCtx.lineTo(element.x + element.width / 2, element.y + element.height);
+					tempCtx.lineTo(element.x, element.y + element.height / 2);
+					tempCtx.closePath();
+					tempCtx.fill();
+					tempCtx.stroke();
+					break;
+			}
+
+			// Draw element text
+			tempCtx.fillStyle = '#000000';
+			tempCtx.font = '14px Public Sans';
+			tempCtx.textAlign = 'center';
+			tempCtx.textBaseline = 'middle';
+			tempCtx.fillText(element.text, element.x + element.width / 2, element.y + element.height / 2);
+		});
+
+		tempCtx.restore();
+
+		// Create download link
+		const dataURL = tempCanvas.toDataURL('image/png');
+		const link = document.createElement('a');
+		link.download = 'flowchart.png';
+		link.href = dataURL;
+		link.click();
+	}
+
 	onMount(() => {
 		onAuthStateChanged(auth, (userData) => {
 			if (userData) {
 				user = userData;
-				initCanvas();
+				loading = false;
+				initCanvas(); // Initialize canvas after authentication
 			} else {
-				goto('/');
+				goto('/'); // Redirect to home if not authenticated
 			}
 		});
 	});
@@ -416,9 +549,14 @@
 					<Card.Description>Design professional flowcharts with ease</Card.Description>
 				</div>
 				<div class="flex gap-2">
-					<Button.Root variant="outline" class="gap-2">
+					<Button.Root
+						variant="outline"
+						class="gap-2"
+						on:click={saveAsPNG}
+						disabled={elements.length === 0}
+					>
 						<Save size={16} />
-						Save
+						Save as PNG
 					</Button.Root>
 					<Button.Root variant="outline" class="gap-2">
 						<Download size={16} />
@@ -466,18 +604,39 @@
 					</Card.Content>
 				</Card.Root>
 
-				<Button.Root
-					variant="outline"
-					class="w-full justify-start gap-2"
-					on:click={() => {
-						isConnectionMode = !isConnectionMode;
-						sourceShape = null;
-						tempConnection = null;
-					}}
-				>
-					<ArrowRight size={16} />
-					{isConnectionMode ? 'Cancel Connection' : 'Connect Shapes'}
-				</Button.Root>
+				<div class="space-y-2">
+					<Button.Root
+						variant="outline"
+						class="w-full justify-start gap-2"
+						on:click={() => {
+							isConnectionMode = !isConnectionMode;
+							sourceShape = null;
+							tempConnection = null;
+						}}
+					>
+						<ArrowRight size={16} />
+						{isConnectionMode ? 'Cancel Connection' : 'Connect Shapes'}
+					</Button.Root>
+
+					{#if isConnectionMode}
+						<div class="mt-2 p-2 border rounded-md">
+							<label class="text-sm font-medium block mb-2">Connection Color</label>
+							<div class="grid grid-cols-4 gap-2">
+								{#each connectionColors as color}
+									<div
+										class="w-6 h-6 rounded-full cursor-pointer border-2"
+										style="background-color: {color.value}; border-color: {connectionColor ===
+										color.value
+											? '#000'
+											: 'transparent'}"
+										on:click={() => (connectionColor = color.value)}
+										title={color.label}
+									></div>
+								{/each}
+							</div>
+						</div>
+					{/if}
+				</div>
 
 				<!-- Properties -->
 				<!-- In the Properties Card -->
@@ -487,7 +646,11 @@
 					</Card.Header>
 					<Card.Content>
 						<div class="space-y-4">
-							<Button.Root variant="outline" class="w-full justify-start gap-2" on:click={undo}>
+							<Button.Root
+								variant="outline"
+								class="cursor-pointer w-full justify-start gap-2"
+								on:click={undo}
+							>
 								<RotateCcw size={16} />
 								Undo
 							</Button.Root>
