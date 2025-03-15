@@ -119,29 +119,29 @@
 					{/if}
 
 					{#if user}
-						<div class="flex items-center gap-4">
-							<a
-								href="/dashboard"
-								class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
-							>
-								<img
-									src={user.photoURL}
-									alt="Profile"
-									class="w-8 h-8 rounded-full border-2 border-gray-200"
-								/>
-								<span class="font-medium">{user.displayName}</span>
-							</a>
-
-							<Button.Root
-								variant="outline"
-								size="sm"
-								class="gap-2 cursor-pointer px-4 py-1.5 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(239,68,68,1)] border-2"
-								on:click={handleSignOut}
-							>
-								<LogOut size={16} />
-								Sign Out
-							</Button.Root>
-						</div>
+					<div class="flex items-center gap-4">
+						<a
+							href="/profile"
+							class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
+						>
+							<img
+								src={user.photoURL}
+								alt="Profile"
+								class="w-8 h-8 rounded-full border-2 border-gray-200"
+							/>
+							<span class="font-medium">{user.displayName}</span>
+						</a>
+					
+						<Button.Root
+							variant="outline"
+							size="sm"
+							class="gap-2 cursor-pointer px-4 py-1.5 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(239,68,68,1)] border-2"
+							on:click={handleSignOut}
+						>
+							<LogOut size={16} />
+							Sign Out
+						</Button.Root>
+					</div>					
 					{:else if !isAuthPage}
 						<Button.Root
 							variant="default"
