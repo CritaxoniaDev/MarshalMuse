@@ -52,13 +52,21 @@
             color: 'bg-green-100 text-green-600',
             href: '/app/ai-prompt-generator'
         },
-		{
+        {
             title: 'Base64 Encoder/Decoder',
             icon: FileCode,
             description: 'Convert between base64 and text/images easily',
             stats: '100+ Conversions',
             color: 'bg-amber-100 text-amber-600',
             href: '/app/base64-tool'
+        },
+        {
+            title: 'Code Snippet Manager',
+            icon: Clipboard,
+            description: 'Store, organize and share your code snippets at ease',
+            stats: '45 Saved Snippets',
+            color: 'bg-pink-100 text-pink-600',
+            href: '/app/code-snippet-manager'
         },
         {
             title: 'Code Generator',
@@ -68,15 +76,8 @@
             color: 'bg-orange-100 text-orange-600'
         },
         {
-            title: 'Code Snippet Manager',
-            icon: Clipboard,
-            description: 'Store, organize and share your code snippets',
-            stats: '45 Saved Snippets',
-            color: 'bg-pink-100 text-pink-600'
-        },
-        {
             title: 'UML Diagram',
-			icon: Workflow,
+            icon: Workflow,
             description: 'Create professional UML diagrams for your projects',
             stats: '5 Diagram Types',
             color: 'bg-indigo-100 text-indigo-600'
@@ -117,100 +118,99 @@
 
                 <!-- Development Tools Carousel -->
                 <div class="mb-8">
-					<h2 class="text-xl font-semibold mb-6 px-2">Development Tools</h2>
-					
-					<Carousel.Root class="w-full">
-						<Carousel.Content class="-ml-4">
-							{#each devTools as tool, i}
-								{@const isComingSoon = tool.title === 'Kanban Board' || tool.title === 'Code Generator' || 
-													  tool.title === 'Code Snippet Manager' || tool.title === 'UML Diagram' || 
-													  tool.title === 'ER Diagram'}
-								
-								<Carousel.Item class="pl-4 md:basis-1/2 lg:basis-1/4">
-									<div class="h-full">
-										<Card.Root class={`h-full transition-all duration-300 ${isComingSoon ? 'relative overflow-hidden' : ''}`}>
-											{#if isComingSoon}
-												<div class="absolute -rotate-45 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-1 left-[-40px] top-[20px] w-[170px] text-center text-sm shadow-md z-10">
-													COMING SOON
-												</div>
-												<div class="absolute inset-0 bg-gray-100 bg-opacity-40 backdrop-filter backdrop-blur-[1px] z-[1]"></div>
-											{/if}
-											
-											<Card.Header class={`${isComingSoon ? 'opacity-70' : ''} px-5 py-4`}>
-												<div class="flex items-center justify-between mb-3">
-													<div class={`p-3 rounded-lg ${tool.color}`}>
-														<svelte:component this={tool.icon} size={24} />
-													</div>
-													<Button.Root variant="ghost" size="icon" class="h-8 w-8">
-														<Settings size={18} />
-													</Button.Root>
-												</div>
-												<Card.Title class="text-lg font-semibold mb-2">{tool.title}</Card.Title>
-												<Card.Description class="text-sm leading-relaxed">{tool.description}</Card.Description>
-											</Card.Header>
-											
-											<Card.Content class="px-5 pb-5">
-												<div class="flex items-center justify-between">
-													<span class="text-sm font-medium">
-														{#if isComingSoon}
-															<span class="flex items-center gap-1">
-																<span class="relative flex h-2 w-2">
-																	<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-																	<span class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
-																</span>
-																Launching Soon
-															</span>
-														{:else}
-															{tool.stats}
-														{/if}
-													</span>
-													
-													{#if isComingSoon}
-														<Button.Root
-															variant="outline"
-															size="sm"
-															disabled={true}
-															class="gap-2 px-5 py-2 text-sm border-2 opacity-70 cursor-not-allowed relative z-[2]"
-														>
-															<span class="flex items-center gap-1">
-																<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-																	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-																</svg>
-																Get Early Access
-															</span>
-														</Button.Root>
-													{:else}
-														<Button.Root
-															variant="outline"
-															size="sm"
-															class="gap-2 cursor-pointer px-5 py-2 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] border-2"
-															on:click={() => goto(tool.href)}
-														>
-															Open Tool
-														</Button.Root>
-													{/if}
-												</div>
-											</Card.Content>
-										</Card.Root>
-									</div>
-								</Carousel.Item>
-							{/each}
-						</Carousel.Content>
-						
-						<div class="flex justify-center mt-4 gap-2">
-							<Carousel.Previous class="relative left-0 translate-x-0 bg-white border shadow-sm hover:bg-gray-100">
-								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="m15 18-6-6 6-6"/>
-								</svg>
-							</Carousel.Previous>
-							<Carousel.Next class="relative right-0 translate-x-0 bg-white border shadow-sm hover:bg-gray-100">
-								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="m9 18 6-6-6-6"/>
-								</svg>
-							</Carousel.Next>
-						</div>
-					</Carousel.Root>
-				</div>				
+                    <h2 class="text-xl font-semibold mb-6 px-2">Development Tools</h2>
+                    
+                    <Carousel.Root class="w-full">
+                        <Carousel.Content class="-ml-4">
+                            {#each devTools as tool, i}
+                                {@const isComingSoon = tool.title === 'Kanban Board' || tool.title === 'Code Generator' || 
+                                                      tool.title === 'UML Diagram' || tool.title === 'ER Diagram'}
+                                
+                                <Carousel.Item class="pl-4 md:basis-1/2 lg:basis-1/4">
+                                    <div class="h-full">
+                                        <Card.Root class={`h-full transition-all duration-300 ${isComingSoon ? 'relative overflow-hidden' : ''}`}>
+                                            {#if isComingSoon}
+                                                <div class="absolute -rotate-45 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-1 left-[-40px] top-[20px] w-[170px] text-center text-sm shadow-md z-10">
+                                                    COMING SOON
+                                                </div>
+                                                <div class="absolute inset-0 bg-gray-100 bg-opacity-40 backdrop-filter backdrop-blur-[1px] z-[1]"></div>
+                                            {/if}
+                                            
+                                            <Card.Header class={`${isComingSoon ? 'opacity-70' : ''} px-5 py-4`}>
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class={`p-3 rounded-lg ${tool.color}`}>
+                                                        <svelte:component this={tool.icon} size={24} />
+                                                    </div>
+                                                    <Button.Root variant="ghost" size="icon" class="h-8 w-8">
+                                                        <Settings size={18} />
+                                                    </Button.Root>
+                                                </div>
+                                                <Card.Title class="text-lg font-semibold mb-2">{tool.title}</Card.Title>
+                                                <Card.Description class="text-sm leading-relaxed">{tool.description}</Card.Description>
+                                            </Card.Header>
+                                            
+                                            <Card.Content class="px-5 pb-5">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-sm font-medium">
+                                                        {#if isComingSoon}
+                                                            <span class="flex items-center gap-1">
+                                                                <span class="relative flex h-2 w-2">
+                                                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                                                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                                                                </span>
+                                                                Launching Soon
+                                                            </span>
+                                                        {:else}
+                                                            {tool.stats}
+                                                        {/if}
+                                                    </span>
+                                                    
+                                                    {#if isComingSoon}
+                                                        <Button.Root
+                                                            variant="outline"
+                                                            size="sm"
+                                                            disabled={true}
+                                                            class="gap-2 px-5 py-2 text-sm border-2 opacity-70 cursor-not-allowed relative z-[2]"
+                                                        >
+                                                            <span class="flex items-center gap-1">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                                                </svg>
+                                                                Get Early Access
+                                                            </span>
+                                                        </Button.Root>
+                                                    {:else}
+                                                        <Button.Root
+                                                            variant="outline"
+                                                            size="sm"
+                                                            class="gap-2 cursor-pointer px-5 py-2 text-sm transition duration-200 hover:shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] border-2"
+                                                            on:click={() => goto(tool.href)}
+                                                        >
+                                                            Open Tool
+                                                        </Button.Root>
+                                                    {/if}
+                                                </div>
+                                            </Card.Content>
+                                        </Card.Root>
+                                    </div>
+                                </Carousel.Item>
+                            {/each}
+                        </Carousel.Content>
+                        
+                        <div class="flex justify-center mt-4 gap-2">
+                            <Carousel.Previous class="relative left-0 translate-x-0 bg-white border shadow-sm hover:bg-gray-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m15 18-6-6 6-6"/>
+                                </svg>
+                            </Carousel.Previous>
+                            <Carousel.Next class="relative right-0 translate-x-0 bg-white border shadow-sm hover:bg-gray-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m9 18 6-6-6-6"/>
+                                </svg>
+                            </Carousel.Next>
+                        </div>
+                    </Carousel.Root>
+                </div>
 
                 <!-- Recent Activity -->
                 <Card.Root>
