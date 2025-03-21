@@ -59,8 +59,10 @@
 		"@fontsource-variable/inter": "^5.2.5",
 		"@fontsource-variable/public-sans": "^5.2.5",
 		"@zerodevx/svelte-toast": "^0.9.6",
+		"crypto-browserify": "^3.12.1",
 		"firebase": "^11.4.0",
 		"mermaid": "^11.5.0",
+		"nodemailer": "^6.10.0",
 		"svelte-icons": "^2.1.0",
 		"svelte-motion": "^0.12.2",
 		"svelte-routing": "^2.13.0"
