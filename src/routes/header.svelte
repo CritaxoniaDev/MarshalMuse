@@ -98,24 +98,35 @@
 
 			<!-- Desktop Navigation Links -->
 			<div class="hidden md:flex items-center space-x-6">
-				<!-- Documentation Dropdown -->
-				<div class="relative group">
-					<button class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+				<!-- Guest Navigation -->
+				{#if !user}
+					<a href="/docs/getting-started" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
 						<BookOpen size={16} />
 						<span>Documentation</span>
-						<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-						</svg>
-					</button>
-					<div class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-						{#each docNavItems as item}
-							<a href={item.href} class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-								<svelte:component this={item.icon} size={16} />
-								{item.title}
-							</a>
-						{/each}
-					</div>
-				</div>
+					</a>
+					<a href="/docs/flowchart-creator" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+						<BarChart2 size={16} />
+						<span>Flowchart Creator</span>
+					</a>
+					<a href="/docs/api" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+						<FileText size={16} />
+						<span>API Reference</span>
+					</a>
+				{:else}
+					<!-- Authenticated Navigation -->
+					<a href="/dashboard" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+						<BarChart2 size={16} />
+						<span>Dashboard</span>
+					</a>
+					<a href="/app/flowchart-creator" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+						<BarChart2 size={16} />
+						<span>Flowchart Creator</span>
+					</a>
+					<a href="/docs" class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+						<BookOpen size={16} />
+						<span>Documentation</span>
+					</a>
+				{/if}
 			</div>
 
 			<!-- Mobile Menu Button -->
@@ -220,44 +231,54 @@
 		{#if isMenuOpen}
 			<div class="lg:hidden py-4 transform transition-all duration-300 ease-in-out">
 				<div class="flex flex-col space-y-3">
-					<!-- Documentation Navigation for Mobile -->
-					<div class="px-4 py-2 border-b border-gray-100">
-						<div class="font-medium text-gray-700 mb-2 flex items-center gap-2">
-							<BookOpen size={16} />
-							<span>Documentation</span>
+					<!-- Guest Navigation for Mobile -->
+					{#if !user}
+						<div class="px-4 py-2 border-b border-gray-100">
+							<div class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+								<BookOpen size={16} />
+								<span>Documentation</span>
+							</div>
+							<div class="pl-6 space-y-1">
+								{#each docNavItems as item}
+									<a href={item.href} class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
+										<svelte:component this={item.icon} size={14} />
+										{item.title}
+									</a>
+								{/each}
+							</div>
 						</div>
-						<div class="pl-6 space-y-1">
-							{#each docNavItems as item}
-								<a href={item.href} class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
-									<svelte:component this={item.icon} size={14} />
-									{item.title}
-								</a>
-							{/each}
-						</div>
-					</div>
-
-					<!-- Apps Navigation for Mobile -->
-					<div class="px-4 py-2 border-b border-gray-100">
-						<div class="font-medium text-gray-700 mb-2 flex items-center gap-2">
-							<BarChart2 size={16} />
-							<span>Applications</span>
-						</div>
-						<div class="pl-6 space-y-1">
-							{#if user}
+					{:else}
+						<!-- Authenticated Navigation for Mobile -->
+						<div class="px-4 py-2 border-b border-gray-100">
+							<div class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+								<BarChart2 size={16} />
+								<span>Applications</span>
+							</div>
+							<div class="pl-6 space-y-1">
 								{#each appNavItems as item}
 									<a href={item.href} class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
 										<svelte:component this={item.icon} size={14} />
 										{item.title}
 									</a>
 								{/each}
-							{:else}
-								<a href="/docs/flowchart-creator" class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
-									<BarChart2 size={14} />
-									Flowchart Creator
-								</a>
-							{/if}
+							</div>
 						</div>
-					</div>
+						
+						<div class="px-4 py-2 border-b border-gray-100">
+							<div class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+								<BookOpen size={16} />
+								<span>Documentation</span>
+							</div>
+							<div class="pl-6 space-y-1">
+								{#each docNavItems as item}
+									<a href={item.href} class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
+										<svelte:component this={item.icon} size={14} />
+										{item.title}
+									</a>
+								{/each}
+							</div>
+						</div>
+					{/if}
 
 					<!-- Search for mobile -->
 					<div class="px-4 mb-2">
@@ -303,30 +324,29 @@
 							class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg border-2 border-blue-600 transition-all duration-200 hover:shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]"
 							on:click={() => (window.location.href = '/login')}
 						>
-							Sign In
-						</button>
-					{/if}
-					
-					<!-- Mobile Theme Toggle -->
-					<button
-						class="w-full flex items-center justify-between px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg border-2 border-gray-200 transition-all duration-200"
-						on:click={toggleTheme}
-					>
-						<span>Toggle Theme</span>
-						<div class="relative">
-							{#if isDark}
-								<Sun size={16} class="text-yellow-500" />
-							{:else}
-								<Moon size={16} class="text-blue-600" />
-							{/if}
-						</div>
+						Sign In
 					</button>
-				</div>
+				{/if}
+				
+				<!-- Mobile Theme Toggle -->
+				<button
+					class="w-full flex items-center justify-between px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg border-2 border-gray-200 transition-all duration-200"
+					on:click={toggleTheme}
+				>
+					<span>Toggle Theme</span>
+					<div class="relative">
+						{#if isDark}
+							<Sun size={16} class="text-yellow-500" />
+						{:else}
+							<Moon size={16} class="text-blue-600" />
+						{/if}
+					</div>
+				</button>
 			</div>
 		</div>
-	{/if}
+	</div>
+{/if}
 </nav>
 </header>
 
 <div class="h-16"><!-- Spacer to prevent content jump --></div>
-

@@ -8,6 +8,9 @@
 	import * as Separator from '$lib/components/ui/separator';
 	import createShapeImage from '$lib/assets/images/docs/image1.png';
     import connectShapesImage from '$lib/assets/images/docs/image2.png';
+	import moveFlowchartImage from '$lib/assets/images/docs/flowchart-move.png';
+	import exportImage from '$lib/assets/images/docs/export-image.png';
+	import addingTextImage from '$lib/assets/images/docs/add-image.png';
 	import {
 		Square,
 		Circle,
@@ -97,19 +100,19 @@ connections.push({
 			title: 'Adding Text',
 			content:
 				'Double-click on any shape to add or edit its text label. Press Enter to save or Escape to cancel.',
-			image: '/images/docs/flowchart-edit-text.png'
+			image: addingTextImage
 		},
 		{
 			title: 'Moving Elements',
 			content:
 				'Click and drag any shape to reposition it on the canvas. Connections will automatically update to follow the shapes.',
-			image: '/images/docs/flowchart-move.png'
+			image: moveFlowchartImage
 		},
 		{
 			title: 'Exporting Your Flowchart',
 			content:
 				'Click the "Save as PNG" button to download your flowchart as an image file that you can share or include in documents.',
-			image: '/images/docs/flowchart-export.png'
+			image: exportImage
 		}
 	];
 
