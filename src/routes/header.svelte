@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { Menu, X, Github, Search, Sun, Moon, LogOut } from 'lucide-svelte';
+	import { Menu, X, Github, Search, Sun, Moon, LogOut, BookOpen, FileText, BarChart2 } from 'lucide-svelte';
 	import { spring } from 'svelte/motion';
 	import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 	import { page } from '$app/stores';
@@ -34,13 +34,7 @@
 			user = userData;
 		});
 	});
-
-	onMount(() => {
-		onAuthStateChanged(auth, (userData) => {
-			user = userData;
-		});
-	});
-
+	
 	function toggleTheme() {
 		isDark = !isDark;
 		document.documentElement.classList.toggle('dark');
@@ -54,6 +48,20 @@
 			console.error('Error signing out:', error);
 		}
 	}
+	
+	// Documentation navigation items
+	const docNavItems = [
+		{ title: 'Getting Started', href: '/docs/getting-started', icon: FileText },
+		{ title: 'Flowchart Creator', href: '/docs/flowchart-creator', icon: BarChart2 },
+		{ title: 'API Reference', href: '/docs/api', icon: FileText },
+		{ title: 'Examples', href: '/docs/examples', icon: FileText }
+	];
+
+	// App navigation items
+	const appNavItems = [
+		{ title: 'Dashboard', href: '/dashboard', icon: BarChart2 },
+		{ title: 'Flowchart Creator', href: '/app/flowchart-creator', icon: BarChart2 },
+	];
 </script>
 
 <header
@@ -87,6 +95,28 @@
 				</div>
 				<span class="font-bold text-xl tracking-tight">MarshalMuse</span>
 			</a>
+
+			<!-- Desktop Navigation Links -->
+			<div class="hidden md:flex items-center space-x-6">
+				<!-- Documentation Dropdown -->
+				<div class="relative group">
+					<button class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+						<BookOpen size={16} />
+						<span>Documentation</span>
+						<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+						</svg>
+					</button>
+					<div class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
+						{#each docNavItems as item}
+							<a href={item.href} class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+								<svelte:component this={item.icon} size={16} />
+								{item.title}
+							</a>
+						{/each}
+					</div>
+				</div>
+			</div>
 
 			<!-- Mobile Menu Button -->
 			<button
@@ -190,6 +220,45 @@
 		{#if isMenuOpen}
 			<div class="lg:hidden py-4 transform transition-all duration-300 ease-in-out">
 				<div class="flex flex-col space-y-3">
+					<!-- Documentation Navigation for Mobile -->
+					<div class="px-4 py-2 border-b border-gray-100">
+						<div class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+							<BookOpen size={16} />
+							<span>Documentation</span>
+						</div>
+						<div class="pl-6 space-y-1">
+							{#each docNavItems as item}
+								<a href={item.href} class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
+									<svelte:component this={item.icon} size={14} />
+									{item.title}
+								</a>
+							{/each}
+						</div>
+					</div>
+
+					<!-- Apps Navigation for Mobile -->
+					<div class="px-4 py-2 border-b border-gray-100">
+						<div class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+							<BarChart2 size={16} />
+							<span>Applications</span>
+						</div>
+						<div class="pl-6 space-y-1">
+							{#if user}
+								{#each appNavItems as item}
+									<a href={item.href} class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
+										<svelte:component this={item.icon} size={14} />
+										{item.title}
+									</a>
+								{/each}
+							{:else}
+								<a href="/docs/flowchart-creator" class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-blue-600">
+									<BarChart2 size={14} />
+									Flowchart Creator
+								</a>
+							{/if}
+						</div>
+					</div>
+
 					<!-- Search for mobile -->
 					<div class="px-4 mb-2">
 						<div class="relative">
@@ -227,21 +296,37 @@
 								class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg border-2 border-gray-200 hover:text-red-600 transition-all duration-200"
 								on:click={handleSignOut}
 							>
-								<LogOut size={16} /> Sign Out
-							</button>
-						{:else}
-							<button
-								class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg border-2 border-blue-600 transition-all duration-200 hover:shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]"
-								on:click={() => (window.location.href = '/login')}
-							>
-								Sign In
-							</button>
-						{/if}
-					</div>
+							<LogOut size={16} /> Sign Out
+						</button>
+					{:else}
+						<button
+							class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg border-2 border-blue-600 transition-all duration-200 hover:shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]"
+							on:click={() => (window.location.href = '/login')}
+						>
+							Sign In
+						</button>
+					{/if}
+					
+					<!-- Mobile Theme Toggle -->
+					<button
+						class="w-full flex items-center justify-between px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg border-2 border-gray-200 transition-all duration-200"
+						on:click={toggleTheme}
+					>
+						<span>Toggle Theme</span>
+						<div class="relative">
+							{#if isDark}
+								<Sun size={16} class="text-yellow-500" />
+							{:else}
+								<Moon size={16} class="text-blue-600" />
+							{/if}
+						</div>
+					</button>
 				</div>
 			</div>
-		{/if}
-	</nav>
+		</div>
+	{/if}
+</nav>
 </header>
 
 <div class="h-16"><!-- Spacer to prevent content jump --></div>
+
