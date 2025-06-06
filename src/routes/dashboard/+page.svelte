@@ -17,7 +17,8 @@
 		Brain,
 		Clipboard,
 		Database,
-		FileCode
+		FileCode,
+		Hash
 	} from 'lucide-svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Button from '$lib/components/ui/button';
@@ -59,6 +60,14 @@
 			stats: '100+ Conversions',
 			color: 'bg-amber-100 text-amber-600',
 			href: '/app/base64-tool'
+		},
+		{
+			title: 'Hash Generator',
+			icon: Hash,
+			description: 'Generate MD5, SHA-1, SHA-256, and other hash algorithms',
+			stats: '75+ Hashes Generated',
+			color: 'bg-red-100 text-red-600',
+			href: '/app/hash-generator'
 		},
 		{
 			title: 'Code Snippet Manager',
